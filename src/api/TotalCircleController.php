@@ -50,8 +50,9 @@ class TotalCircleController extends Controller
                         $seriesSql .= ", SUM(CASE WHEN ";
                         $countFilter = count($filter);
                         foreach($filter as $keyFilter => $listFilter){
-                            $seriesSql .= " ".$listFilter->key." ".($listFilter->operator ?? "=")." '".$listFilter->value."' ";
-                            $seriesSql .= $countFilter-1 != $keyFilter ? " AND " : "";
+                            $seriesSql .= ' '.$listFilter->key.' '.($listFilter->operator ?? '='). (! empty($listFilter->value) ? " '".$listFilter->value."' ": "");
+                            $joiner = $listFilter->joiner ?? ' AND ';
+                            $seriesSql .= $countFilter - 1 != $keyFilter ? ' '.$joiner.' ' : '';
                         }
                         $seriesSql .= "then ".$calculation." else 0 end) as \"".$labelList[$seriesKey]."\"";
                     } else {
